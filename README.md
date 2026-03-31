@@ -37,46 +37,41 @@ The result is an interactive dashboard that lets analysts, investors, and policy
 
 ## Architecture
 
-```
-Kaggle Dataset (CSV)
-        │
-        ▼
-┌─────────────────────┐
-│   Bruin Pipeline    │  ← orchestrates ingestion + transformation
-│                     │
-│  Asset 1:           │
-│  ingest_to_s3.py    │  CSV → Parquet (ZSTD) → S3 bronze/
-│                     │
-│  Asset 2:           │
-│  run_dbt.py         │  calls dbt (depends on Asset 1)
-└─────────────────────┘
-        │
-        ▼
-┌─────────────────────┐
-│   AWS S3 (bronze/)  │  raw Parquet 
-└─────────────────────┘
-        │
-        ▼
-┌─────────────────────┐
-│   dbt + DuckDB      │  staging → intermediate → marts
-│   (httpfs)          │  reads S3, writes S3
-└─────────────────────┘
-        │
-        ▼
-┌─────────────────────┐
-│   AWS S3 (gold/)    │  transformed Parquet mart tables
-│   + Glue Catalog    │  schema registered for Athena
-└─────────────────────┘
-        │
-        ▼
-┌─────────────────────┐
-│   Amazon Athena     │  serverless SQL on S3 Parquet
-└─────────────────────┘
-        │
-        ▼
-┌─────────────────────┐
-│ Streamlit Dashboard │  queries Athena via boto3
-└─────────────────────┘
+```mermaid
+graph LR
+    subgraph Ingestion
+    A[Kaggle Dataset<br/>CSV] --> B{Bruin Pipeline}
+    end
+
+    subgraph "Orchestration (Bruin)"
+    B --> C["Asset 1:<br/>ingest_to_s3.py"]
+    C -.->|Depends on| D["Asset 2:<br/>run_dbt.py"]
+    end
+
+    subgraph "Storage: Bronze"
+    C --> E[("AWS S3 (bronze/)<br/>Raw Parquet (ZSTD)")]
+    end
+
+    subgraph "Transformation"
+    D --> F["dbt + DuckDB<br/>(httpfs)"]
+    E --> F
+    F -->|Staging → Intermediate → Marts| G
+    end
+
+    subgraph "Storage: Gold"
+    G[("AWS S3 (gold/)<br/>Transformed Parquet")]
+    H["AWS Glue<br/>Data Catalog"]
+    G --- H
+    end
+
+    subgraph Consumption
+    H --> I[Amazon Athena]
+    I -->|Queries via boto3| J[Streamlit Dashboard]
+    end
+
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#dfd,stroke:#333,stroke-width:2px
+    style J fill:#fff,stroke:#333,stroke-width:4px
 ```
 
 **dbt lineage graph**
