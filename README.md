@@ -1,5 +1,7 @@
 # ⚡ EV Market Intelligence Pipeline
 
+> **Author:** Bigboy Mutichakwa &nbsp;|&nbsp; [LinkedIn](https://www.linkedin.com/in/bigboy-m-57211074/) &nbsp;|&nbsp; bmuticha@gmail.com
+
 > **End-to-end batch data pipeline** analysing global electric vehicle market trends (2010–2024).
 > Built as the final project for the [DataTalks.Club Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp).
 
@@ -1212,6 +1214,16 @@ The dataset uses three powertrain types:
 > focus on when measuring the "true" EV transition. That is why the market share
 > bar chart filters to `powertrain = 'BEV'` — it gives the cleanest signal of
 > which regions are genuinely moving away from petrol.
+
+---
+## Author
+
+**Bigboy Mutichakwa**
+Data Engineer | DataTalks.Club DE Zoomcamp 2026
+
+- LinkedIn: [linkedin.com/in/bigboy-m-57211074](https://www.linkedin.com/in/bigboy-m-57211074/)
+- Email: bmuticha@gmail.com
+- GitHub: [github.com/biggymuticha](https://github.com/biggymuticha)
 
 ---
 
