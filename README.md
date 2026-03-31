@@ -19,7 +19,7 @@ The electric vehicle industry is undergoing a structural transformation — but 
 
 This pipeline answers: **Which regions are leading the EV transition, by what measure, and how has that changed year-over-year?**
 
-The result is an interactive dashboard that lets analysts, investors, and policymakers explore EV market share and adoption trends across 50+ countries from 2010 to 2035 (historical + projections).
+The result is an interactive dashboard that lets analysts, investors, and policymakers explore EV market share and adoption trends across countries from 2010 to 2035 (historical + projections).
 
 ---
 
