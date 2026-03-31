@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: stg_ev_sales
+    description: "Cleaned EV sales source data"
+    columns:
+      - name: region
+        description: "Geographic region"
+        tests:
+          - not_null                      # test type 1: not_null
+
+      - name: year
+        description: "Year of record"
+        tests:
+          - not_null                      # test type 1: not_null
+
+      - name: value
+        description: "Numeric value of the metric"
+        tests:
+          - not_null                      # test type 1: not_null
+
+  - name: int_ev_enriched
+    description: "Pivoted and enriched EV data"
+    columns:
+      - name: powertrain
+        description: "Powertrain type"
+        tests:
+          - not_null                      # test type 1: not_null
+          - accepted_values:              # test type 2: accepted_values. 
+              values: ['BEV', 'PHEV', 'FCEV']
+
+      - name: ev_sales_units
+        description: "Must be zero or positive — no negative sales"
+        tests:
+          - dbt_utils.expression_is_true: # test type 3: custom expression
+              expression: ">= 0"
+
+  - name: fct_global_market_share
+    description: "Global market share mart"
+    columns:
+      - name: region
+        tests:
+          - not_null                      # test type 1: not_null
+
+      - name: avg_sales_share_pct
+        description: "Share percent must be between 0 and 100"
+        tests:
+          - dbt_utils.expression_is_true: # test type 3: custom expression
+              expression: "between 0 and 100"
+
+      - name: year
+        description: "Year must be within dataset range"
+        tests:
+          - dbt_utils.expression_is_true: # test type 3: custom expression
+              expression: "between 2010 and 2040"
+
+  - name: fct_ev_adoption_trends
+    description: "EV adoption trends mart"
+    columns:
+      - name: region
+        tests:
+          - not_null                      # test type 1: not_null
+
+      - name: total_ev_sales
+        tests:
+          - not_null                      # test type 1: not_null
+          - dbt_utils.expression_is_true: # test type 3: custom expression
+              expression: ">= 0"
+
+      - name: powertrain
+        tests:
+          - relationships:                # test type 4: referential integrity
+              to: ref('int_ev_enriched')
+              field: powertrain

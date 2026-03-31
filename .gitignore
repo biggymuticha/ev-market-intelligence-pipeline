@@ -217,3 +217,7 @@ logs/runs
 logs/*.log
 *.py[cod]
 *.zip
+
+transform/dbt_packages/
+transform/target/
+transform/logs/
