@@ -205,3 +205,15 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+data/
+.terraform
+terraform.tfstate*
+
+.bruin.ymltransform/profiles.yml
+*.duckdb
+
+.bruin.yml
+logs/runs
+logs/*.log
+*.py[cod]
+*.zip

@@ -1,0 +1,22 @@
+# transform/dbt_project.yml
+name: 'ev_pipeline'
+version: '1.0.0'
+profile: 'ev_pipeline'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+macro-paths: ["macros"]
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  ev_pipeline:
+    staging:
+      +materialized: view         # Views cost nothing — no data is stored
+    intermediate:
+      +materialized: table        # Local DuckDB table for intermediate work
+    marts:
+      +materialized: external     # Writes Parquet to S3 gold/ — queryable by Athena
+      +format: parquet
+      +compression: zstd

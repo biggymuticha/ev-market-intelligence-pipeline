@@ -1,0 +1,14 @@
+# transform/models/staging/sources.yml
+# This tells dbt that our raw data lives in S3 as a Parquet file.
+# The external_location uses the dbt-duckdb S3 source feature.
+
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw EV sales Parquet files in S3 bronze layer"
+    meta:
+      external_location: "s3://{{ env_var('S3_BUCKET_NAME') }}/bronze/ev_sales/{name}.parquet"
+    tables:
+      - name: ev_sales
+        description: "Raw global EV sales data, 2010–2024"

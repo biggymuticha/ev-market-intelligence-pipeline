@@ -1,0 +1,27 @@
+# transform/profiles.yml
+# dbt uses DuckDB as the query engine.
+# The httpfs extension lets DuckDB read/write S3 directly.
+# External_root tells dbt where to write "external" materializations (gold Parquet on S3).
+
+ev_pipeline:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "/workspaces/ev-market-intelligence-pipeline/ev_pipeline.duckdb"
+      schema: main
+
+      # Load the httpfs extension so DuckDB can talk to S3
+      extensions:
+        - httpfs
+        - parquet
+
+      # Pass S3 credentials into DuckDB
+      settings:
+        s3_region: "us-east-1"
+        s3_access_key_id: "{{ env_var('AWS_ACCESS_KEY_ID') }}"
+        s3_secret_access_key: "{{ env_var('AWS_SECRET_ACCESS_KEY') }}"
+
+      # Where dbt writes external Parquet files (gold layer)
+      # dbt-duckdb will write mart tables here as Parquet
+      external_root: "s3://{{ env_var('S3_BUCKET_NAME') }}/gold"

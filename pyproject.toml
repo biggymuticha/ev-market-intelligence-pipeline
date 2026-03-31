@@ -1,0 +1,17 @@
+[project]
+name = "ev-market-intelligence"
+version = "0.1.0"
+description = "AWS EV Data Pipeline"
+dependencies = [
+    "dbt-core",
+    "dbt-duckdb",
+    "duckdb",
+    "boto3",
+    "streamlit",
+    "plotly",
+    "pandas",
+    "kaggle",
+    "python-dotenv",
+    "pyarrow",
+    "duckdb-cli",
+]
